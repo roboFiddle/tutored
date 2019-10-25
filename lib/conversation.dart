@@ -108,7 +108,7 @@ class ConversationState extends State<Conversation> {
               ),
               currentAccountPicture: Material(
                 child: CachedNetworkImage(
-                  placeholder: Container(
+                  /* placeholder: Container(
                     child: CircularProgressIndicator(
                       strokeWidth: 1.0,
                       valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).errorColor),
@@ -116,7 +116,7 @@ class ConversationState extends State<Conversation> {
                     width: 50.0,
                     height: 50.0,
                     padding: EdgeInsets.all(15.0),
-                  ),
+                  ), */
                   imageUrl: widget.document['photoUrl'],
                   width: 50.0,
                   height: 50.0,

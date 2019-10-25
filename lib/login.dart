@@ -196,18 +196,18 @@ class UserState extends State<User> {
                 textAlign: TextAlign.center,
               ),
               RadioListTile<int>(
-                title: new Text (
-                  'Student',
-                  style: new TextStyle(
-                    color: Theme.of(context).textSelectionColor,
+                  title: new Text (
+                    'Student',
+                    style: new TextStyle(
+                      color: Theme.of(context).textSelectionColor,
+                    ),
                   ),
-                ),
-                value: 0,
-                groupValue: roleValue,
-                activeColor: Theme.of(context).textSelectionColor,
-                onChanged: (int value) {
-                  setState(() => roleValue = value);
-                }),
+                  value: 0,
+                  groupValue: roleValue,
+                  activeColor: Theme.of(context).textSelectionColor,
+                  onChanged: (int value) {
+                    setState(() => roleValue = value);
+                  }),
               RadioListTile<int>(
                   title: new Text (
                     'Tutor',
@@ -215,12 +215,12 @@ class UserState extends State<User> {
                       color: Theme.of(context).textSelectionColor,
                     ),
                   ),
-                value: 1,
-                groupValue: roleValue,
-                activeColor: Theme.of(context).textSelectionColor,
-                onChanged: (int value) {
-                  setState(() => roleValue = value);
-                }),
+                  value: 1,
+                  groupValue: roleValue,
+                  activeColor: Theme.of(context).textSelectionColor,
+                  onChanged: (int value) {
+                    setState(() => roleValue = value);
+                  }),
               RadioListTile<int>(
                   title: new Text (
                     'Both',
@@ -228,12 +228,12 @@ class UserState extends State<User> {
                       color: Theme.of(context).textSelectionColor,
                     ),
                   ),
-                value: 2,
-                groupValue: roleValue,
-                activeColor: Theme.of(context).textSelectionColor,
-                onChanged: (int value) {
-                  setState(() => roleValue = value);
-              }),
+                  value: 2,
+                  groupValue: roleValue,
+                  activeColor: Theme.of(context).textSelectionColor,
+                  onChanged: (int value) {
+                    setState(() => roleValue = value);
+                  }),
             ],
           ),
           Container (
@@ -269,7 +269,7 @@ class UserState extends State<User> {
                   child: Text(
                     'Go!',
                     style: TextStyle(
-                        fontSize: 18.0,
+                      fontSize: 18.0,
                     ),
                   ),
                   color: Theme.of(context).accentColor,

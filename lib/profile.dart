@@ -70,7 +70,7 @@ class ProfileState extends State<Profile> {
                 alignment: Alignment(0.0,-0.9),
                 child: Material(
                   child: CachedNetworkImage(
-                    placeholder: Container(
+                    placeholder: (context, url) => Container(
                       child: CircularProgressIndicator(
                         strokeWidth: 2.0,
                         valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).errorColor),
