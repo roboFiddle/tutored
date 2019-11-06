@@ -82,6 +82,20 @@ class Authentication {
           await prefs.setString('photoUrl', documents[0]['photoUrl']);
           await prefs.setString('aboutMe', documents[0]['aboutMe']);
           await prefs.setInt('grade', documents[0]['grade']);
+          await prefs.setString('contact', documents[0]['contact']);
+          await prefs.setString('englishState', documents[0]['englishState']);
+          await prefs.setString('mathState', documents[0]['mathState']);
+          await prefs.setString('historyState', documents[0]['historyState']);
+          await prefs.setString('languageState', documents[0]['languageState']);
+          await prefs.setString('scienceState', documents[0]['scienceState']);
+          await prefs.setString('selectedLanguage', documents[0]['selectedLanguage']);
+          await prefs.setBool("monday", documents[0]['monday']);
+          await prefs.setBool("tuesday", documents[0]['tuesday']);
+          await prefs.setBool("wednesday", documents[0]['wednesday']);
+          await prefs.setBool("thursday", documents[0]['thursday']);
+          await prefs.setBool("friday", documents[0]['friday']);
+          await prefs.setBool("saturday", documents[0]['saturday']);
+          await prefs.setBool("sunday", documents[0]['sunday']);
           if (documents[0]['role'] == null) {
             isLoading.value = false;
             Navigator.of(context).pushReplacementNamed('/user');

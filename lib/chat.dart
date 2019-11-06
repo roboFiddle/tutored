@@ -28,6 +28,73 @@ class ChatState extends State<Chat> {
     setState(() {});
   }
 
+  String requests(DocumentSnapshot document) {
+    List<String> avail = new List<String>();
+    if(document['englishState'] == "TT")
+      avail.add("English");
+    if(document['mathState'] == "TT")
+      avail.add("Math");
+    if(document['historyState'] == "TT")
+      avail.add("History");
+    if(document['languageState'] == "TT") {
+      switch(document['selectedLanguage']) {
+        case "SP":
+          avail.add("Spanish");
+          break;
+        case "FR":
+          avail.add("French");
+          break;
+        case "CH":
+          avail.add("Chinese");
+          break;
+        case "IT":
+          avail.add("Italian");
+          break;
+        case "LA":
+          avail.add("Latin");
+          break;
+        default:
+          avail.add("Foreign Language");
+      }
+    }
+    if(document['scienceState'] == "TT")
+      avail.add("Science");
+    return avail.join(", ");
+  }
+  String offers(DocumentSnapshot document) {
+    List<String> avail = new List<String>();
+    if(document['englishState'] == "WT")
+      avail.add("English");
+    if(document['mathState'] == "WT")
+      avail.add("Math");
+    if(document['historyState'] == "WT")
+      avail.add("History");
+    if(document['languageState'] == "WT") {
+      switch(document['selectedLanguage']) {
+        case "SP":
+          avail.add("Spanish");
+          break;
+        case "FR":
+          avail.add("French");
+          break;
+        case "CH":
+          avail.add("Chinese");
+          break;
+        case "IT":
+          avail.add("Italian");
+          break;
+        case "LA":
+          avail.add("Latin");
+          break;
+        default:
+          avail.add("Foreign Language");
+      }
+    }
+    if(document['scienceState'] == "WT")
+      avail.add("Science");
+    return avail.join(", ");
+  }
+
   Widget buildUser(BuildContext context, DocumentSnapshot document, int r) {
     if (document['id'] == id || document['role'] == r || r == -1) {
       return Container();
@@ -62,6 +129,22 @@ class ChatState extends State<Chat> {
                       Container(
                         child: Text(
                           'Name: ${document['name']}',
+                          style: TextStyle(color: Theme.of(context).textSelectionColor),
+                        ),
+                        alignment: Alignment.centerLeft,
+                        margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 5.0),
+                      ),
+                      Container(
+                        child: Text(
+                          'Grade: ${document['grade']}',
+                          style: TextStyle(color: Theme.of(context).textSelectionColor),
+                        ),
+                        alignment: Alignment.centerLeft,
+                        margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 5.0),
+                      ),
+                      Container(
+                        child: Text(
+                          r == 0 ? "Tutoring: " + offers(document) : "Requests: " + requests(document),
                           style: TextStyle(color: Theme.of(context).textSelectionColor),
                         ),
                         alignment: Alignment.centerLeft,
@@ -120,47 +203,37 @@ class ChatState extends State<Chat> {
   };
 
   Widget buildSegmentedControl() {
-    if (role == 0) {
-      Dashboard.title = 'Students';
-      return buildChatList(role);
-    } else if (role == 1) {
-      Dashboard.title = 'Tutors';
-      return buildChatList(role);
-    } else if (role == 2) {
-      return Column(
-        children: <Widget>[
-          const Padding(
-            padding: EdgeInsets.all(8.0),
+    return Column(
+      children: <Widget>[
+        const Padding(
+          padding: EdgeInsets.all(8.0),
+        ),
+        SizedBox (
+          width: 500,
+          child: CupertinoSegmentedControl<int>(
+            borderColor: Theme.of(context).hintColor,
+            selectedColor: Theme.of(context).primaryColorDark,
+            pressedColor: Theme.of(context).primaryColorLight,
+            unselectedColor: Theme.of(context).accentColor,
+            children: options,
+            onValueChanged: (int val) {
+              setState(() {
+                value = val;
+              });
+            },
+            groupValue: value,
           ),
-          SizedBox (
-            width: 500,
-            child: CupertinoSegmentedControl<int>(
-              borderColor: Theme.of(context).hintColor,
-              selectedColor: Theme.of(context).primaryColorDark,
-              pressedColor: Theme.of(context).primaryColorLight,
-              unselectedColor: Theme.of(context).accentColor,
-              children: options,
-              onValueChanged: (int val) {
-                setState(() {
-                  value = val;
-                });
-              },
-              groupValue: value,
-            ),
+        ),
+        const Padding(
+          padding: EdgeInsets.all(8.0),
+        ),
+        Expanded (
+          child: Container (
+            child: buildChatList(1-value),
           ),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-          ),
-          Expanded (
-            child: Container (
-              child: buildChatList(1-value),
-            ),
-          ),
-        ],
-      );
-    } else {
-      return Container();
-    }
+        ),
+      ],
+    );
   }
 
   @override

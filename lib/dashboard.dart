@@ -126,7 +126,7 @@ class DashboardState extends State<Dashboard> {
                   color: Theme.of(context).accentColor,
                 ),
                 title: new Text(
-                  'Chat',
+                  'Requests',
                   style: new TextStyle(
                     color: Theme.of(context).accentColor,
                   ),

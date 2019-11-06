@@ -5,6 +5,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'authentication.dart';
 import 'dashboard.dart';
 
@@ -33,91 +34,34 @@ class LoginState extends State<Login> {
   }
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      body: Stack (
-        children: <Widget>[
-          Center (
-            child: Stack (
-              children: <Widget> [
-                Container (
-                  alignment: new Alignment(0,-0.5),
-                  child: Image.asset(
-                    'images/lightbulb.jpg',
-                    height: 300.0,
-                    width: 300.0,
-                  ),
-                ),
-                Container (
-                  alignment: new Alignment(0,0),
-                  child: Text (
-                    'TutorED',
-                    style: new TextStyle(
-                      color: Colors.black,
-                      fontSize: 50.0,
-                      fontFamily: 'Lato',
-                      fontWeight: FontWeight.w500,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
+    return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
+      body: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image(
+              image: AssetImage('images/logo.jpg'),
+              height: 300.0,
+              width: 300.0,
             ),
-          ),
-          Center (
-            child: Column (
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            SizedBox(height: 100.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                Text(
-                  'Log in in with your email.',
-                  style: new TextStyle(
-                    fontSize: 15.0,
-                    fontFamily: 'Roboto',
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 5.0),
-                ),
-                RawMaterialButton (
-                  elevation: 2.5,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Container (
-                        padding: EdgeInsets.fromLTRB(7, 0, 20, 0),
-                        child: Image.asset(
-                          'images/google.jpg',
-                          height: 30.0,
-                          width: 30.0,
-                        ),
-                      ),
-                      Container (
-                        padding: EdgeInsets.fromLTRB(0, 0, 80, 0),
-                        child: Text(
-                          'Sign in',
-                          style: new TextStyle(
-                            fontSize: 16.0,
-                            fontFamily: 'Roboto',
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  onPressed: () => auth.signIn(context),
-                  fillColor: Colors.white,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 20.0),
+                GoogleSignInButton(
+                  onPressed: () => auth.signIn(context)
                 )
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
+
 class User extends StatefulWidget {
   @override
   UserState createState() => new UserState();
@@ -143,7 +87,7 @@ class UserState extends State<User> {
     name = prefs.getString('name') ?? '';
   }
 
-  void addData(int role, String grade) {
+  void addData(int role) {
     if (role != -1) {
       setState(() {
         auth.isLoading.value = true;
@@ -151,9 +95,39 @@ class UserState extends State<User> {
       Firestore.instance
           .collection('users')
           .document(id)
-          .updateData({'role': role, 'grade': int.parse(_gradeController.text)}).then((data) async {
+          .updateData({
+            'role': role,
+            'englishState': "NI",
+            'mathState': "NI",
+            'historyState': "NI",
+            'languageState': "NI",
+            'scienceState': "NI",
+            'selectedLanguage': "NA",
+            'monday': true,
+            'tuesday': true,
+            'wednesday': true,
+            'thursday': true,
+            'friday': true,
+            'saturday': true,
+            'sunday': true,
+          }).then((data) async {
         await prefs.setInt('role', role);
-        await prefs.setInt('grade', int.parse(grade));
+        await prefs.setString('aboutMe',"");
+        await prefs.setString('contact', "");
+        await prefs.setInt('grade', 0);
+        await prefs.setString('englishState', "NI");
+        await prefs.setString('mathState', "NI");
+        await prefs.setString('historyState', "NI");
+        await prefs.setString('languageState', "NI");
+        await prefs.setString('scienceState', "NI");
+        await prefs.setString('selectedLanguage', "NA");
+        await prefs.setBool("monday", true);
+        await prefs.setBool("tuesday", true);
+        await prefs.setBool("wednesday", true);
+        await prefs.setBool("thursday", true);
+        await prefs.setBool("friday", true);
+        await prefs.setBool("saturday", true);
+        await prefs.setBool("sunday", true);
         setState(() {
           auth.isLoading.value = false;
         });
@@ -166,7 +140,6 @@ class UserState extends State<User> {
     }
   }
   int roleValue = -1;
-  final TextEditingController _gradeController = new TextEditingController();
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -210,7 +183,7 @@ class UserState extends State<User> {
                   }),
               RadioListTile<int>(
                   title: new Text (
-                    'Tutor',
+                    'Parent',
                     style: new TextStyle(
                       color: Theme.of(context).textSelectionColor,
                     ),
@@ -221,51 +194,14 @@ class UserState extends State<User> {
                   onChanged: (int value) {
                     setState(() => roleValue = value);
                   }),
-              RadioListTile<int>(
-                  title: new Text (
-                    'Both',
-                    style: new TextStyle(
-                      color: Theme.of(context).textSelectionColor,
-                    ),
-                  ),
-                  value: 2,
-                  groupValue: roleValue,
-                  activeColor: Theme.of(context).textSelectionColor,
-                  onChanged: (int value) {
-                    setState(() => roleValue = value);
-                  }),
             ],
-          ),
-          Container (
-            padding: EdgeInsets.fromLTRB(30, 0, 50, 0),
-            alignment: Alignment(0.0, 0.45),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text (
-                  'Grade:  ',
-                  style: new TextStyle(
-                    color: Theme.of(context).textSelectionColor,
-                    fontSize: 24,
-                  ),
-                ),
-                Flexible(
-                  child: TextFormField(
-                    controller: _gradeController,
-                    keyboardType: TextInputType.number,
-                    maxLines: 1,
-                  ),
-                ),
-              ],
-            ),
           ),
           Container (
             alignment: Alignment(0.0, 0.8),
             child: ButtonTheme(
               minWidth: 150,
               child: RaisedButton(
-                  onPressed: () => addData(roleValue, _gradeController.text),
+                  onPressed: () => addData(roleValue),
                   child: Text(
                     'Go!',
                     style: TextStyle(
